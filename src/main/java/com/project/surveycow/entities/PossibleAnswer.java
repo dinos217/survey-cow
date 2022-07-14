@@ -7,16 +7,17 @@ import java.io.Serializable;
 
 @Data
 @Entity
-@Table(name = "answer")
-public class Answer implements Serializable {
+@Table(name = "possible_answer")
+public class PossibleAnswer implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "guestion_id")
-    private Long questionId;
+    @ManyToOne
+    private Question question;
 
-    @Column(name = "survey_id")
-    private Long surveyId;
+    @Column(name = "content")
+    private String content;
+
 }
