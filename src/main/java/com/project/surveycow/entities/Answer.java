@@ -19,4 +19,7 @@ public class Answer implements Serializable {
 
     @Column(name = "survey_id")
     private Long surveyId;
+
+    @Column(name = "user_id")
+    private Long userId;
 }
