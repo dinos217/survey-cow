@@ -3,13 +3,15 @@ package com.project.surveycow.dtos;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
-public class QuestionResponseDto {
+public class SavedAnswerDto {
 
+    private Long userId;
     private Long surveyId;
     private Long questionId;
     private String userResponse;
-    private Long userId;
-    private Boolean isLast;
+    private LocalDateTime creationTime;
 }

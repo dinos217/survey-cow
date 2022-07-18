@@ -1,12 +1,11 @@
 package com.project.surveycow.services;
 
-import com.project.surveycow.dtos.AnswerDto;
+import com.project.surveycow.dtos.SavedAnswerDto;
+import com.project.surveycow.dtos.QuestionResponseDto;
 import org.springframework.stereotype.Service;
 
 @Service
 public interface AnswerService {
 
-    AnswerDto save(AnswerDto answerDto);
-
-
+    SavedAnswerDto save(QuestionResponseDto questionResponseDto);
 }
