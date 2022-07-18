@@ -3,7 +3,9 @@ package com.project.surveycow.services;
 import com.project.surveycow.dtos.AnswerDto;
 import com.project.surveycow.dtos.QuestionResponseDto;
 import com.project.surveycow.entities.Answer;
+import com.project.surveycow.mappers.AnswerMapper;
 import com.project.surveycow.repositories.AnswerRepository;
+import org.mapstruct.factory.Mappers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +19,7 @@ public class AnswerServiceImpl implements AnswerService {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private AnswerRepository answerRepository;
-//    private AnswerMapper answerMapper = Mappers.getMapper(AnswerMapper.class);
+    private AnswerMapper answerMapper = Mappers.getMapper(AnswerMapper.class);
 
     @Autowired
     public AnswerServiceImpl(AnswerRepository answerRepository) {

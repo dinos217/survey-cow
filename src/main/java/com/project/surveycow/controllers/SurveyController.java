@@ -6,13 +6,14 @@ import com.project.surveycow.services.SurveyService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "/survey")
@@ -35,5 +36,37 @@ public class SurveyController {
         SurveyDto surveyDto = surveyService.save(surveyRequestDto);
         return ResponseEntity.status(HttpStatus.OK).body(surveyDto);
     }
+
+    @GetMapping(value = "/all")
+    public ResponseEntity<Page<SurveyDto>> findAll(@RequestParam Integer page,
+                                                   @RequestParam Integer pageSize,
+                                                   @RequestParam String sortBy,
+                                                   @RequestParam String direction) {
+
+        logger.info("Started finding all surveys paged...");
+
+        Sort sort = Sort.by(Sort.Direction.fromString(direction), sortBy);
+        Pageable pageable = PageRequest.of(page, pageSize, sort);
+
+        return ResponseEntity.status(HttpStatus.OK).body(surveyService.findAll(pageable));
+    }
+
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<SurveyDto> findById(@PathVariable Long id) {
+
+        logger.info("Started finding survey with id: " + id);
+
+        return ResponseEntity.status(HttpStatus.OK).body(surveyService.findById(id));
+    }
+
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity delete(@PathVariable Long id) {
+
+        logger.info("Started deleting survey with id: " + id);
+
+        surveyService.delete(id);
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
 
 }

@@ -1,6 +1,7 @@
 package com.project.surveycow.entities;
 
 import lombok.Data;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -17,6 +18,7 @@ public class PossibleAnswer implements Serializable {
     @Column(name = "content")
     private String content;
 
+    @ToString.Exclude
     @ManyToOne
     private Question question;
 

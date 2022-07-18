@@ -1,6 +1,7 @@
 package com.project.surveycow.entities;
 
 import lombok.Data;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -19,10 +20,12 @@ public class Question implements Serializable {
     @Column(name = "content")
     private String content;
 
+    @ToString.Exclude
     @ManyToOne
     private Survey survey;
 
-    @OneToMany(mappedBy = "question", cascade = CascadeType.PERSIST)
+    @ToString.Exclude
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
     private List<PossibleAnswer> possibleAnswers = new ArrayList<>();
 
 }

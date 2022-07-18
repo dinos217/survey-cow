@@ -7,7 +7,7 @@ import java.util.List;
 
 @Getter
 @Setter
-public class AnswerDto {
+public class  AnswerDto {
 
     private Long id;
     private Long surveyId;
