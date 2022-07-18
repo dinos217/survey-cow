@@ -7,9 +7,7 @@ import com.project.surveycow.dtos.SurveyRequestDto;
 import com.project.surveycow.entities.PossibleAnswer;
 import com.project.surveycow.entities.Question;
 import com.project.surveycow.entities.Survey;
-import com.project.surveycow.mappers.SurveyMapper;
 import com.project.surveycow.repositories.SurveyRepository;
-import org.mapstruct.factory.Mappers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +22,6 @@ public class SurveyServiceImpl implements SurveyService {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private SurveyRepository surveyRepository;
-//    private SurveyMapper surveyMapper = Mappers.getMapper(SurveyMapper.class);
-//    private QuestionMapper questionMapper = Mappers.getMapper(QuestionMapper.class);
-//    private PossibleAnswerMapper possibleAnswerMapper = Mappers.getMapper(PossibleAnswerMapper.class);
 
     @Autowired
     public SurveyServiceImpl(SurveyRepository surveyRepository) {
@@ -62,6 +57,8 @@ public class SurveyServiceImpl implements SurveyService {
             questions.add(question);
         }
         survey.setQuestions(questions);
+
+        surveyRepository.save(survey);
 
         return null;
     }
