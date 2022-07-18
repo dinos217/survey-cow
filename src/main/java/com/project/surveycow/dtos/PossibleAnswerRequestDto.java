@@ -5,9 +5,8 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class PossibleAnswerDto {
+public class PossibleAnswerRequestDto {
 
-    private Long id;
-    private QuestionDto question;
+    private Long questionId;
     private String content;
 }

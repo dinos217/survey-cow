@@ -16,7 +16,13 @@ public class Survey implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "survey")
+    @Column(name = "title")
+    private String title;
+
+    @Column(name = "description")
+    private String description;
+
+    @OneToMany(mappedBy = "survey", cascade = CascadeType.PERSIST)
     private List<Question> questions = new ArrayList<>();
 
 }

@@ -14,10 +14,10 @@ public class PossibleAnswer implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    private Question question;
-
     @Column(name = "content")
     private String content;
+
+    @ManyToOne
+    private Question question;
 
 }
