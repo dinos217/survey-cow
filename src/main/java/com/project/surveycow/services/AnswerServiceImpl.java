@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class AnswerServiceImpl implements AnswerService {
@@ -43,6 +44,13 @@ public class AnswerServiceImpl implements AnswerService {
 
         if (!questionResponseDto.getIsLast()) {
 
+        }
+
+        if (questionResponseDto.getCanceled()) {
+            List<Answer> answersToDelete = answerRepository
+                    .findAllByUserIdAndSurveyIdAndQuestionId(questionResponseDto.getUserId(), questionResponseDto.getSurveyId(), questionResponseDto.getQuestionId());
+            answerRepository.deleteAll(answersToDelete);
+            //todo: add kafka msg
         }
 
         return answerMapper.answerToSavedAnswerDto(savedAnswer);

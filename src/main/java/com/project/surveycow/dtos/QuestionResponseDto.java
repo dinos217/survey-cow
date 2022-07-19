@@ -12,4 +12,5 @@ public class QuestionResponseDto {
     private String userResponse;
     private Long userId;
     private Boolean isLast;
+    private Boolean canceled;
 }
