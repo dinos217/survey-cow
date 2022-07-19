@@ -29,4 +29,7 @@ public class Answer implements Serializable {
 
     @Column(name = "creation_time")
     private LocalDateTime creationTime;
+
+    @Column(name = "update_time")
+    private LocalDateTime updateTime;
 }

@@ -1,7 +1,7 @@
 package com.project.surveycow.services;
 
-import com.project.surveycow.dtos.SavedAnswerDto;
 import com.project.surveycow.dtos.QuestionResponseDto;
+import com.project.surveycow.dtos.SavedAnswerDto;
 import com.project.surveycow.entities.Answer;
 import com.project.surveycow.mappers.AnswerMapper;
 import com.project.surveycow.repositories.AnswerRepository;
@@ -40,20 +40,42 @@ public class AnswerServiceImpl implements AnswerService {
         Answer answer = answerMapper.questionResponseDtoToAnswer(questionResponseDto);
         answer.setCreationTime(LocalDateTime.now());
         Answer savedAnswer = answerRepository.save(answer);
-        kafkaTemplate.send(TOPIC_NAME, savedAnswer);
+
+        logger.info("New answer saved with id: " + savedAnswer.getId());
+//        kafkaTemplate.send(TOPIC_NAME, savedAnswer);
 
         if (!questionResponseDto.getIsLast()) {
-
-        }
-
-        if (questionResponseDto.getCanceled()) {
-            List<Answer> answersToDelete = answerRepository
-                    .findAllByUserIdAndSurveyIdAndQuestionId(questionResponseDto.getUserId(), questionResponseDto.getSurveyId(), questionResponseDto.getQuestionId());
-            answerRepository.deleteAll(answersToDelete);
             //todo: add kafka msg
         }
 
         return answerMapper.answerToSavedAnswerDto(savedAnswer);
+    }
 
+    @Transactional
+    @Override
+    public SavedAnswerDto update(QuestionResponseDto questionResponseDto) {
+
+        Answer answerToUpdate = answerRepository.findByUserIdAndSurveyIdAndQuestionId(questionResponseDto.getUserId(),
+                questionResponseDto.getSurveyId(), questionResponseDto.getQuestionId());
+
+        answerToUpdate.setUserResponse(questionResponseDto.getUserResponse());
+        answerToUpdate.setUpdateTime(LocalDateTime.now());
+
+        logger.info("Updating user response to question with question id: " + questionResponseDto.getQuestionId());
+
+        return answerMapper.answerToSavedAnswerDto(answerRepository.save(answerToUpdate));
+    }
+
+    @Override
+    public void deletePreviousAnswers(QuestionResponseDto questionResponseDto) {
+
+        List<Answer> answersToDelete = answerRepository.findAllByUserIdAndSurveyIdAndQuestionId(
+                questionResponseDto.getUserId(), questionResponseDto.getSurveyId(), questionResponseDto.getQuestionId());
+
+        answerRepository.deleteAll(answersToDelete);
+
+        logger.info("Deleting all responses of survey: " + questionResponseDto.getSurveyId() +
+                " because user with id: " + questionResponseDto.getUserId() + " canceled the process.");
+        //todo: add kafka msg
     }
 }

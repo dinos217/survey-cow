@@ -8,4 +8,8 @@ import org.springframework.stereotype.Service;
 public interface AnswerService {
 
     SavedAnswerDto save(QuestionResponseDto questionResponseDto);
+
+    SavedAnswerDto update(QuestionResponseDto questionResponseDto);
+
+    void deletePreviousAnswers(QuestionResponseDto questionResponseDto);
 }
