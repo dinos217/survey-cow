@@ -1,23 +1,15 @@
 package com.project.surveycow;
 
 import com.project.surveycow.dtos.QuestionResponseDto;
-import com.project.surveycow.repositories.AnswerRepository;
-import com.project.surveycow.services.AnswerServiceImpl;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class AnswerControllerTest extends BasicTestConfig {
-
-    @Mock
-    private AnswerServiceImpl answerService;
-
-    @Mock
-    private AnswerRepository answerRepository;
 
     //@Ignore this test after running once OR change values in QuestionResponseDto fields
     @Test
