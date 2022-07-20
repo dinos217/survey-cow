@@ -38,8 +38,8 @@ public class AnswerServiceImpl implements AnswerService {
     @Override
     public SavedAnswerDto save(QuestionResponseDto questionResponseDto) {
 
-        if (answerRepository.existsAnswersByUserIdAndSurveyId(questionResponseDto.getUserId(),
-                questionResponseDto.getSurveyId())) {
+        if (answerRepository.existsByUserIdAndSurveyIdAndQuestionId(questionResponseDto.getUserId(),
+                questionResponseDto.getSurveyId(), questionResponseDto.getQuestionId())) {
             logger.info("User with id: " + questionResponseDto.getUserId() +
                     " has already taken the Survey with id: " + questionResponseDto.getSurveyId());
             throw new SurveyAlreadyTakenException("User with id: " + questionResponseDto.getUserId() +

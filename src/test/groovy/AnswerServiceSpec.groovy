@@ -19,6 +19,7 @@ class AnswerServiceSpec extends Specification {
         QuestionResponseDto questionResponseDto = new QuestionResponseDto()
         questionResponseDto.setUserId(1L)
         questionResponseDto.setSurveyId(1L)
+        questionResponseDto.setQuestionId(1L)
         questionResponseDto.setIsLast(false)
         Answer answer = new Answer()
 
@@ -26,7 +27,7 @@ class AnswerServiceSpec extends Specification {
         service.save(questionResponseDto)
 
         then:
-        1 * answerRepository.existsAnswersByUserIdAndSurveyId(1L, 1L) >> false
+        1 * answerRepository.existsByUserIdAndSurveyIdAndQuestionId(1L, 1L, 1L) >> false
         1 * answerRepository.save(_) >> answer
     }
 

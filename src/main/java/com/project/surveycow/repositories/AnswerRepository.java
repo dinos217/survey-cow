@@ -15,4 +15,6 @@ public interface AnswerRepository extends JpaRepository<Answer, Long> {
 
     Boolean existsAnswersByUserIdAndSurveyId(Long userId, Long surveyId);
 
+    Boolean existsByUserIdAndSurveyIdAndQuestionId(Long userId, Long surveyId, Long questionId);
+
 }
