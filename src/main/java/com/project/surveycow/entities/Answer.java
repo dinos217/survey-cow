@@ -18,7 +18,7 @@ public class Answer implements Serializable {
     @Column(name = "survey_id")
     private Long surveyId;
 
-    @Column(name = "guestion_id")
+    @Column(name = "question_id")
     private Long questionId;
 
     @Column(name = "user_response")

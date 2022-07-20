@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 @Setter
 public class SavedAnswerDto {
 
+    private Long id;
     private Long userId;
     private Long surveyId;
     private Long questionId;

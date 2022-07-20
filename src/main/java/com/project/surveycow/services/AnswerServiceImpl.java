@@ -3,6 +3,7 @@ package com.project.surveycow.services;
 import com.project.surveycow.dtos.QuestionResponseDto;
 import com.project.surveycow.dtos.SavedAnswerDto;
 import com.project.surveycow.entities.Answer;
+import com.project.surveycow.exceptions.EntityNotFoundException;
 import com.project.surveycow.exceptions.SurveyAlreadyTakenException;
 import com.project.surveycow.mappers.AnswerMapper;
 import com.project.surveycow.repositories.AnswerRepository;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AnswerServiceImpl implements AnswerService {
@@ -64,9 +66,13 @@ public class AnswerServiceImpl implements AnswerService {
     @Override
     public SavedAnswerDto update(QuestionResponseDto questionResponseDto) {
 
-        Answer answerToUpdate = answerRepository.findByUserIdAndSurveyIdAndQuestionId(questionResponseDto.getUserId(),
+        Optional<Answer> answerOptional = answerRepository.findByUserIdAndSurveyIdAndQuestionId(questionResponseDto.getUserId(),
                 questionResponseDto.getSurveyId(), questionResponseDto.getQuestionId());
 
+        if (answerOptional.isEmpty()) throw new EntityNotFoundException("Survey Id: " + questionResponseDto.getSurveyId() +
+                ", Question Id: " + questionResponseDto.getQuestionId() + ": Answer was not found.");
+
+        Answer answerToUpdate = answerOptional.get();
         answerToUpdate.setUserResponse(questionResponseDto.getUserResponse());
         answerToUpdate.setUpdateTime(LocalDateTime.now());
 
