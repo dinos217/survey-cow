@@ -9,16 +9,16 @@ import org.springframework.stereotype.Service;
 @Service
 public class KafkaProducerService {
 
-//    private Logger logger = LoggerFactory.getLogger(this.getClass());
-//
-//    private static final String TOPIC_NAME = "test";
-//
-//    @Autowired
-//    private KafkaTemplate<String, String> kafkaTemplate;
-//
-//    public void sendMessage(String message) {
-//        logger.info(String.format("Message sent -> %s", message));
-//        kafkaTemplate.send(TOPIC_NAME, message);
-//    }
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    private static final String TOPIC_NAME = "answer";
+
+    @Autowired
+    private KafkaTemplate<String, Object> kafkaTemplate;
+
+    public void sendMessage(String message) {
+        logger.info(String.format("Message sent -> %s", message));
+        kafkaTemplate.send(TOPIC_NAME, message);
+    }
 
 }
