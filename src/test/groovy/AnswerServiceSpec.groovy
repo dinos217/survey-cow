@@ -37,13 +37,14 @@ class AnswerServiceSpec extends Specification {
         QuestionResponseDto questionResponseDto = new QuestionResponseDto()
         questionResponseDto.setUserId(1L)
         questionResponseDto.setSurveyId(1L)
+        questionResponseDto.setQuestionId(1L)
         questionResponseDto.setIsLast(false)
 
         when: "the repo save method is called"
         service.save(questionResponseDto)
 
         then:
-        1 * answerRepository.existsAnswersByUserIdAndSurveyId(1L, 1L) >> true
+        1 * answerRepository.existsByUserIdAndSurveyIdAndQuestionId(1L, 1L, 1L) >> true
         Exception ex = thrown()
         ex.getMessage() == "User with id: 1 has already taken the Survey with id: 1"
     }
@@ -65,7 +66,7 @@ class AnswerServiceSpec extends Specification {
         service.update(questionResponseDto)
 
         then:
-        1 * answerRepository.findByUserIdAndSurveyIdAndQuestionId(1L, 1L, 1L) >> answerToUpdate
+        1 * answerRepository.findByUserIdAndSurveyIdAndQuestionId(1L, 1L, 1L) >> Optional.of(answerToUpdate)
         1 * answerRepository.save(_) >> answerToUpdate
     }
 
