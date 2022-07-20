@@ -10,10 +10,8 @@ public class KafkaConsumerService {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-//    @KafkaListener(topics = AppConstants.TOPIC_NAME, groupId = AppConstants.GROUP_ID)
-//    public void consume(String message)
-//    {
-//        logger.info(String.format("Message recieved -> %s", message));
-//    }
-
+    @KafkaListener(topics = "answer", groupId = "survey_cow loggers")
+    public void consume(String message) {
+        logger.info(String.format("Message received -> %s", message));
+    }
 }

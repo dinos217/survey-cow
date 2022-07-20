@@ -3,15 +3,15 @@ import com.project.surveycow.entities.Answer
 import com.project.surveycow.repositories.AnswerRepository
 import com.project.surveycow.services.AnswerService
 import com.project.surveycow.services.AnswerServiceImpl
-import org.springframework.kafka.core.KafkaTemplate
+import com.project.surveycow.services.KafkaProducerService
 import spock.lang.Specification
 
 class AnswerServiceSpec extends Specification {
 
     AnswerRepository answerRepository = Mock(AnswerRepository)
-    KafkaTemplate<String, Object> kafkaTemplate = Mock(KafkaTemplate)
+    KafkaProducerService kafkaProducerService = Mock(KafkaProducerService)
 
-    AnswerService service = new AnswerServiceImpl(answerRepository, kafkaTemplate)
+    AnswerService service = new AnswerServiceImpl(answerRepository, kafkaProducerService)
 
     def "save a new answer in db"() {
 
@@ -22,6 +22,7 @@ class AnswerServiceSpec extends Specification {
         questionResponseDto.setQuestionId(1L)
         questionResponseDto.setIsLast(false)
         Answer answer = new Answer()
+        answer.setId(1L)
 
         when: "the repo save method is called"
         service.save(questionResponseDto)

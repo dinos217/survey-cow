@@ -11,7 +11,6 @@ import org.mapstruct.factory.Mappers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -22,18 +21,16 @@ import java.util.Optional;
 @Service
 public class AnswerServiceImpl implements AnswerService {
 
-    private static final String TOPIC_NAME = "answer-topic";
-
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private AnswerRepository answerRepository;
     private AnswerMapper answerMapper = Mappers.getMapper(AnswerMapper.class);
-    private KafkaTemplate<String, Object> kafkaTemplate;
+    private KafkaProducerService kafkaProducerService;
 
     @Autowired
-    public AnswerServiceImpl(AnswerRepository answerRepository, KafkaTemplate<String, Object> kafkaTemplate) {
+    public AnswerServiceImpl(AnswerRepository answerRepository, KafkaProducerService kafkaConsumerService) {
         this.answerRepository = answerRepository;
-        this.kafkaTemplate = kafkaTemplate;
+        this.kafkaProducerService = kafkaConsumerService;
     }
 
     @Transactional
@@ -53,10 +50,11 @@ public class AnswerServiceImpl implements AnswerService {
         Answer savedAnswer = answerRepository.save(answer);
 
         logger.info("New answer saved with id: " + savedAnswer.getId());
-//        kafkaTemplate.send(TOPIC_NAME, savedAnswer);
+        kafkaProducerService.sendMessage("New answer saved with id: " + savedAnswer.getId());
 
-        if (!questionResponseDto.getIsLast()) {
-            //todo: add kafka msg
+        if (questionResponseDto.getIsLast()) {
+            kafkaProducerService.sendMessage("userId: " + questionResponseDto.getUserId() +
+                    ", surveyId: " + questionResponseDto.getSurveyId() + " DONE.");
         }
 
         return answerMapper.answerToSavedAnswerDto(savedAnswer);
