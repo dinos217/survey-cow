@@ -9,8 +9,10 @@ import java.util.List;
 @Repository
 public interface AnswerRepository extends JpaRepository<Answer, Long> {
 
-    List<Answer> findAllByUserIdAndSurveyIdAndQuestionId(Long userId, Long surveyId, Long questionId);
+    List<Answer> findAllByUserIdAndSurveyId(Long userId, Long surveyId);
 
     Answer findByUserIdAndSurveyIdAndQuestionId(Long userId, Long surveyId, Long questionId);
+
+    Boolean existsAnswersByUserIdAndSurveyId(Long userId, Long surveyId);
 
 }

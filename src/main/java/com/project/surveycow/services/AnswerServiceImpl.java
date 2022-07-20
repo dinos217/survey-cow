@@ -3,6 +3,7 @@ package com.project.surveycow.services;
 import com.project.surveycow.dtos.QuestionResponseDto;
 import com.project.surveycow.dtos.SavedAnswerDto;
 import com.project.surveycow.entities.Answer;
+import com.project.surveycow.exceptions.SurveyAlreadyTakenException;
 import com.project.surveycow.mappers.AnswerMapper;
 import com.project.surveycow.repositories.AnswerRepository;
 import org.mapstruct.factory.Mappers;
@@ -25,10 +26,10 @@ public class AnswerServiceImpl implements AnswerService {
 
     private AnswerRepository answerRepository;
     private AnswerMapper answerMapper = Mappers.getMapper(AnswerMapper.class);
-    private KafkaTemplate<String, Answer> kafkaTemplate;
+    private KafkaTemplate<String, Object> kafkaTemplate;
 
     @Autowired
-    public AnswerServiceImpl(AnswerRepository answerRepository, KafkaTemplate<String, Answer> kafkaTemplate) {
+    public AnswerServiceImpl(AnswerRepository answerRepository, KafkaTemplate<String, Object> kafkaTemplate) {
         this.answerRepository = answerRepository;
         this.kafkaTemplate = kafkaTemplate;
     }
@@ -36,6 +37,14 @@ public class AnswerServiceImpl implements AnswerService {
     @Transactional
     @Override
     public SavedAnswerDto save(QuestionResponseDto questionResponseDto) {
+
+        if (answerRepository.existsAnswersByUserIdAndSurveyId(questionResponseDto.getUserId(),
+                questionResponseDto.getSurveyId())) {
+            logger.info("User with id: " + questionResponseDto.getUserId() +
+                    " has already taken the Survey with id: " + questionResponseDto.getSurveyId());
+            throw new SurveyAlreadyTakenException("User with id: " + questionResponseDto.getUserId() +
+                    " has already taken the Survey with id: " + questionResponseDto.getSurveyId());
+        }
 
         Answer answer = answerMapper.questionResponseDtoToAnswer(questionResponseDto);
         answer.setCreationTime(LocalDateTime.now());
@@ -69,13 +78,12 @@ public class AnswerServiceImpl implements AnswerService {
     @Override
     public void deletePreviousAnswers(QuestionResponseDto questionResponseDto) {
 
-        List<Answer> answersToDelete = answerRepository.findAllByUserIdAndSurveyIdAndQuestionId(
-                questionResponseDto.getUserId(), questionResponseDto.getSurveyId(), questionResponseDto.getQuestionId());
+        List<Answer> answersToDelete = answerRepository.findAllByUserIdAndSurveyId(questionResponseDto.getUserId(),
+                questionResponseDto.getSurveyId());
 
         answerRepository.deleteAll(answersToDelete);
 
         logger.info("Deleting all responses of survey: " + questionResponseDto.getSurveyId() +
                 " because user with id: " + questionResponseDto.getUserId() + " canceled the process.");
-        //todo: add kafka msg
     }
 }
