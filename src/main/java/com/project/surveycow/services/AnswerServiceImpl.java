@@ -53,8 +53,8 @@ public class AnswerServiceImpl implements AnswerService {
         kafkaProducerService.sendMessage("New answer saved with id: " + savedAnswer.getId());
 
         if (questionResponseDto.getIsLast()) {
-            kafkaProducerService.sendMessage("userId: " + questionResponseDto.getUserId() +
-                    ", surveyId: " + questionResponseDto.getSurveyId() + " DONE.");
+            kafkaProducerService.sendMessage("SURVEY FINISHED: userId: " + questionResponseDto.getUserId() +
+                    ", surveyId: " + questionResponseDto.getSurveyId());
         }
 
         return answerMapper.answerToSavedAnswerDto(savedAnswer);
