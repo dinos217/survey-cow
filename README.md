@@ -9,7 +9,7 @@ In order to build and run this application locally, you need to have installed:
 2) [PostgreSQL](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads) 
 3) [Docker Desktop and Docker Compose](https://www.docker.com/products/docker-desktop)
 
-If Docker is installed then head to the directory where this project was cloned (e.g.: C:\User\My Projects\survey-cow) and where the `docker-compose.yml` exists. Open your CLI and type: 
+If Docker is installed, head to the directory where this project was cloned (e.g.: C:\User\My Projects\survey-cow) and where the `docker-compose.yml` exists. Open your CLI and type: 
 `docker-compose -f docker-compose.yml up -d`. This will generate the 2 containers and images needed for Kafka. 
 Then from Docker Desktop open a CLI in kafka container and type `kafka-topics.sh --bootstrap-server localhost:9092 --topic answer --create --partitions 3 --replication-factor 1` to create the topic that is used in the project.
 
